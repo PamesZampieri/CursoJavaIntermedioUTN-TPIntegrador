@@ -1,21 +1,44 @@
 package entidades;
 
-import java.util.ArrayList;
+import jakarta.persistence.*;
+
 import java.util.List;
 
+@Entity
 public class Cliente {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Basic
     private String razonSocial;
     private String cuil;
     private String email;
+
+    @ManyToMany
     private List<Servicio> servicios;
+
+    @ManyToOne
+    @JoinColumn(name = "incidente_id",referencedColumnName = "id")
     private Incidente incidente;
 
-    public Cliente(String razonSocial, String cuil, String email, Incidente incidente) {
+    public Cliente(String razonSocial, String cuil, String email, List<Servicio> servicios) {
         this.razonSocial = razonSocial;
         this.cuil = cuil;
         this.email = email;
-        this.servicios = new ArrayList<>();
-        this.incidente = incidente;
+        this.servicios = servicios;
+    }
+
+    public Cliente() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getRazonSocial() {

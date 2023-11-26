@@ -1,34 +1,63 @@
 package entidades;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
+@Entity
 public class Incidente {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Basic
     private LocalDate fechaCreacion;
+
     private LocalDate fechaEstimadaDeResolucion;
+
     private LocalDate fechaResolucion;
 
+    @ManyToOne
+    @JoinColumn(name = "estado_id", referencedColumnName = "id")
     private Estado estado;
 
-    private List<DetalleIncidente> detalleIncidente;
+    @OneToMany(mappedBy = "incidente")
+    private List<Problema> problemas;
 
+    @ManyToOne
+    @JoinColumn(name = "usuarioCreo_id", referencedColumnName = "id")
     private Usuario usuarioCreo;
 
-    private Especialidad especialidad;
-
+    @ManyToOne
+    @JoinColumn(name = "servicio_id", referencedColumnName = "id")
     private Servicio servicio;
 
-    public Incidente(LocalDate fechaCreacion, LocalDate fechaEstimadaDeResolucion, LocalDate fechaResolucion,
-                     Estado estado, List<DetalleIncidente> detalleIncidente, Usuario usuarioCreo,
-                     Especialidad especialidad, Servicio servicio) {
+    @OneToMany(mappedBy = "incidente")
+    private List<Cliente> clientes;
+
+    @ManyToOne
+    @JoinColumn(name = "tecnico_id", referencedColumnName = "id")
+    private Tecnico tecnico;
+
+    public Incidente(LocalDate fechaCreacion, LocalDate fechaEstimadaDeResolucion, List<Problema> problemas, Servicio servicio) {
         this.fechaCreacion = fechaCreacion;
         this.fechaEstimadaDeResolucion = fechaEstimadaDeResolucion;
-        this.fechaResolucion = fechaResolucion;
-        this.estado = estado;
-        this.detalleIncidente = detalleIncidente;
-        this.usuarioCreo = usuarioCreo;
-        this.especialidad = especialidad;
+        this.estado = new Creado();
+        this.problemas = problemas;
         this.servicio = servicio;
+    }
+
+    public Incidente() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public LocalDate getFechaCreacion() {
@@ -63,12 +92,12 @@ public class Incidente {
         this.estado = estado;
     }
 
-    public List<DetalleIncidente> getDetalleIncidente() {
-        return detalleIncidente;
+    public List<Problema> getDetalleIncidente() {
+        return problemas;
     }
 
-    public void setDetalleIncidente(List<DetalleIncidente> detalleIncidente) {
-        this.detalleIncidente = detalleIncidente;
+    public void setDetalleIncidente(List<Problema> problema) {
+        this.problemas = problema;
     }
 
     public Usuario getUsuarioCreo() {
@@ -77,14 +106,6 @@ public class Incidente {
 
     public void setUsuarioCreo(Usuario usuarioCreo) {
         this.usuarioCreo = usuarioCreo;
-    }
-
-    public Especialidad getEspecialidad() {
-        return especialidad;
-    }
-
-    public void setEspecialidad(Especialidad especialidad) {
-        this.especialidad = especialidad;
     }
 
     public Servicio getServicio() {

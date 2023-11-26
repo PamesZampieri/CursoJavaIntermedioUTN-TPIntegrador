@@ -1,29 +1,52 @@
 package entidades;
 
-import java.util.ArrayList;
+import jakarta.persistence.*;
+
 import java.util.List;
 
+@Entity
 public class Tecnico {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Basic
     private String nombre;
     private String apellido;
     private String email;
     private String telefono;
 
+    @ManyToMany
     private List<Especialidad> especialidades;
 
+    @OneToMany(mappedBy = "tecnico")
     private List<Incidente> incidentes;
 
+    @ManyToOne
+    @JoinColumn(name = "tipo_notificacion_id",referencedColumnName = "id")
     private TipoNotificacion tipoNotificacion;
 
-    public Tecnico(String nombre, String apellido, String email, String telefono, List<Especialidad> especialidades,
-                   List<Incidente> incidentes, TipoNotificacion tipoNotificacion) {
+    public Tecnico(String nombre, String apellido, String email, String telefono,
+                   List<Especialidad> especialidades, TipoNotificacion tipoNotificacion) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
         this.telefono = telefono;
         this.especialidades = especialidades;
-        this.incidentes = incidentes;
         this.tipoNotificacion = tipoNotificacion;
+    }
+
+    public Tecnico() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -91,4 +114,6 @@ public class Tecnico {
     public List<Incidente> listarIncidentePorEstado() {
         return null;
     }
+
+    //asignarIncidente(Incidente incidente)
 }

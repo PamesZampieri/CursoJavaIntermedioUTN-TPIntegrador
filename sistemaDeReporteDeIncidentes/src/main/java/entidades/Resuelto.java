@@ -1,4 +1,4 @@
 package entidades;
 
-public class Resuelto extends Estado{
+public class Resuelto extends Estado {
 }
