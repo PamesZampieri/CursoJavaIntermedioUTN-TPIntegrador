@@ -1,6 +1,5 @@
 package entidades;
 
-import entidades.Tecnico;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -41,6 +40,10 @@ public class TipoNotificacion {
 
     public void setTecnicos(List<Tecnico> tecnicos) {
         this.tecnicos = tecnicos;
+    }
+
+    public boolean esEmail() {
+        return nombre.equals("email");
     }
 
     public String toString() {

@@ -12,19 +12,18 @@ public class Cliente {
 
     @Basic
     private String razonSocial;
-    private String cuil;
+    private String cuit;
     private String email;
 
     @ManyToMany
     private List<Servicio> servicios;
 
-    @ManyToOne
-    @JoinColumn(name = "incidente_id",referencedColumnName = "id")
-    private Incidente incidente;
+    @OneToMany(mappedBy = "cliente")
+    private List<Incidente> incidentes;
 
-    public Cliente(String razonSocial, String cuil, String email, List<Servicio> servicios) {
+    public Cliente(String razonSocial, String cuit, String email, List<Servicio> servicios) {
         this.razonSocial = razonSocial;
-        this.cuil = cuil;
+        this.cuit = cuit;
         this.email = email;
         this.servicios = servicios;
     }
@@ -49,12 +48,12 @@ public class Cliente {
         this.razonSocial = razonSocial;
     }
 
-    public String getCuil() {
-        return cuil;
+    public String getCuit() {
+        return cuit;
     }
 
-    public void setCuil(String cuil) {
-        this.cuil = cuil;
+    public void setCuit(String cuit) {
+        this.cuit = cuit;
     }
 
     public String getEmail() {
@@ -73,11 +72,15 @@ public class Cliente {
         this.servicios = servicios;
     }
 
-    public Incidente getIncidente() {
-        return incidente;
+    public List<Incidente> getIncidentes() {
+        return incidentes;
     }
 
-    public void setIncidente(Incidente incidente) {
-        this.incidente = incidente;
+    public void setIncidentes(List<Incidente> incidentes) {
+        this.incidentes = incidentes;
+    }
+
+    public void agregarIncidente(Incidente incidente) {
+        incidentes.add(incidente);
     }
 }

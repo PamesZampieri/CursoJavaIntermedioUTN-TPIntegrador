@@ -2,6 +2,7 @@ package entidades;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -14,5 +15,24 @@ public abstract class Estado {
     private List<Incidente> incidentes;
 
     @Basic
-    private String nombre;
+    protected String nombre;
+
+    public Estado(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Estado() {
+    }
+
+    public boolean esCreado() {
+        return "Creado".equals(this.nombre);
+    }
+
+    public boolean esResuelto() {
+        return "Resuelto".equals(this.nombre);
+    }
+
+    public void resolver(LocalDateTime fechaHoraResolucion, Incidente incidente) {
+        throw new UnsupportedOperationException("No se puede resolver este incidente");
+    }
 }

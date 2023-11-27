@@ -2,7 +2,7 @@ package entidades;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -12,11 +12,11 @@ public class Incidente {
     private int id;
 
     @Basic
-    private LocalDate fechaCreacion;
+    private LocalDateTime fechaCreacion;
 
-    private LocalDate fechaEstimadaDeResolucion;
+    private LocalDateTime fechaEstimadaResolucion;
 
-    private LocalDate fechaResolucion;
+    private LocalDateTime fechaResolucion;
 
     @ManyToOne
     @JoinColumn(name = "estado_id", referencedColumnName = "id")
@@ -33,18 +33,23 @@ public class Incidente {
     @JoinColumn(name = "servicio_id", referencedColumnName = "id")
     private Servicio servicio;
 
-    @OneToMany(mappedBy = "incidente")
-    private List<Cliente> clientes;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
+    private Cliente cliente;
 
     @ManyToOne
     @JoinColumn(name = "tecnico_id", referencedColumnName = "id")
     private Tecnico tecnico;
 
-    public Incidente(LocalDate fechaCreacion, LocalDate fechaEstimadaDeResolucion, List<Problema> problemas, Servicio servicio) {
-        this.fechaCreacion = fechaCreacion;
-        this.fechaEstimadaDeResolucion = fechaEstimadaDeResolucion;
+    public Incidente(int horasEstimadasResolucion, Usuario usuarioCreo, List<Problema> problemas, Cliente cliente,
+                     Tecnico tecnico, Servicio servicio) {
+        this.fechaCreacion = LocalDateTime.now();
+        this.fechaEstimadaResolucion = this.fechaCreacion.plusHours(horasEstimadasResolucion);
+        this.usuarioCreo = usuarioCreo;
         this.estado = new Creado();
         this.problemas = problemas;
+        this.cliente = cliente;
+        this.tecnico = tecnico;
         this.servicio = servicio;
     }
 
@@ -60,28 +65,28 @@ public class Incidente {
         this.id = id;
     }
 
-    public LocalDate getFechaCreacion() {
+    public LocalDateTime getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(LocalDate fechaCreacion) {
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public LocalDate getFechaResolucion() {
+    public LocalDateTime getFechaEstimadaResolucion() {
+        return fechaEstimadaResolucion;
+    }
+
+    public void setFechaEstimadaResolucion(LocalDateTime fechaEstimadaResolucion) {
+        this.fechaEstimadaResolucion = fechaEstimadaResolucion;
+    }
+
+    public LocalDateTime getFechaResolucion() {
         return fechaResolucion;
     }
 
-    public void setFechaResolucion(LocalDate fechaResolucion) {
+    public void setFechaResolucion(LocalDateTime fechaResolucion) {
         this.fechaResolucion = fechaResolucion;
-    }
-
-    public LocalDate getFechaEstimadaDeResolucion() {
-        return fechaEstimadaDeResolucion;
-    }
-
-    public void setFechaEstimadaDeResolucion(LocalDate fechaEstimadaDeResolucion) {
-        this.fechaEstimadaDeResolucion = fechaEstimadaDeResolucion;
     }
 
     public Estado getEstado() {
@@ -92,12 +97,12 @@ public class Incidente {
         this.estado = estado;
     }
 
-    public List<Problema> getDetalleIncidente() {
+    public List<Problema> getProblemas() {
         return problemas;
     }
 
-    public void setDetalleIncidente(List<Problema> problema) {
-        this.problemas = problema;
+    public void setProblemas(List<Problema> problemas) {
+        this.problemas = problemas;
     }
 
     public Usuario getUsuarioCreo() {
@@ -114,5 +119,37 @@ public class Incidente {
 
     public void setServicio(Servicio servicio) {
         this.servicio = servicio;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Tecnico getTecnico() {
+        return tecnico;
+    }
+
+    public void setTecnico(Tecnico tecnico) {
+        this.tecnico = tecnico;
+    }
+
+    public boolean estaEstadoCreado() {
+        return estado.esCreado();
+    }
+
+    public boolean estaEstadoResuelto() {
+        return estado.esResuelto();
+    }
+
+    public void resolver(LocalDateTime fechaHoraResolucion) {
+        estado.resolver(fechaHoraResolucion, this);
+    }
+
+    public boolean estaResueltoDesde(LocalDateTime fechaHoraDesde) {
+        return fechaResolucion.isAfter(fechaHoraDesde);
     }
 }

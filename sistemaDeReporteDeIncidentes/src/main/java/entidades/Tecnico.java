@@ -2,11 +2,13 @@ package entidades;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Tecnico {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -24,7 +26,7 @@ public class Tecnico {
     private List<Incidente> incidentes;
 
     @ManyToOne
-    @JoinColumn(name = "tipo_notificacion_id",referencedColumnName = "id")
+    @JoinColumn(name = "tipo_notificacion_id", referencedColumnName = "id")
     private TipoNotificacion tipoNotificacion;
 
     public Tecnico(String nombre, String apellido, String email, String telefono,
@@ -105,15 +107,77 @@ public class Tecnico {
         this.tipoNotificacion = tipoNotificacion;
     }
 
-    //TODO:
     public boolean estaDisponible() {
+        for (Incidente incidente : incidentes) {
+            if (incidente.estaEstadoCreado()) {
+                return false;
+            }
+        }
+
         return true;
     }
 
-    //TODO:
-    public List<Incidente> listarIncidentePorEstado() {
+    public boolean puedeResolver(Set<TipoProblema> tiposProblemasAResolver) {
+        Set<TipoProblema> tiposProblemasQueResuelve = new HashSet<>();
+
+        for (Especialidad especialidad : especialidades) {
+            tiposProblemasQueResuelve.addAll(especialidad.getTipoProblema());
+        }
+
+        return tiposProblemasQueResuelve.containsAll(tiposProblemasAResolver);
+    }
+
+    public void asignarIncidente(Incidente incidente) {
+        incidentes.add(incidente);
+    }
+
+    public boolean esNotificacionEmail() {
+        return tipoNotificacion.esEmail();
+    }
+
+    public Incidente obtenerIncidenteCreado() {
+        for (Incidente incidente : incidentes) {
+            if (incidente.estaEstadoCreado()) {
+                return incidente;
+            }
+        }
+
         return null;
     }
 
-    //asignarIncidente(Incidente incidente)
+    public int getCantidadIncidentesResueltos() {
+        int resultado = 0;
+
+        for (Incidente incidente : incidentes) {
+            if (incidente.estaEstadoResuelto()) {
+                resultado++;
+            }
+        }
+
+        return resultado;
+    }
+
+    public int getCantidadIncidentesCreados() {
+        int resultado = 0;
+
+        for (Incidente incidente : incidentes) {
+            if (incidente.estaEstadoCreado()) {
+                resultado++;
+            }
+        }
+
+        return resultado;
+    }
+
+    public int getCantidadIncidentesResueltosDesde(LocalDateTime fechaHoraDesde) {
+        int resultado = 0;
+
+        for (Incidente incidente : incidentes) {
+            if (incidente.estaEstadoResuelto() && incidente.estaResueltoDesde(fechaHoraDesde)) {
+                resultado++;
+            }
+        }
+
+        return resultado;
+    }
 }

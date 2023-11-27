@@ -12,21 +12,19 @@ public class Problema {
     private String descripcion;
 
     @ManyToOne
-    @JoinColumn(name = "incidente_id",referencedColumnName = "id")
+    @JoinColumn(name = "incidente_id", referencedColumnName = "id")
     private Incidente incidente;
 
     @ManyToOne
-    @JoinColumn(name = "tipo_problema_id",referencedColumnName = "id")
+    @JoinColumn(name = "tipo_problema_id", referencedColumnName = "id")
     private TipoProblema tipoProblema;
 
     public Problema() {
 
     }
 
-    public Problema(int id, String descripcion, Incidente incidente, TipoProblema tipoProblema) {
-        this.id = id;
+    public Problema(String descripcion, TipoProblema tipoProblema) {
         this.descripcion = descripcion;
-        this.incidente = incidente;
         this.tipoProblema = tipoProblema;
     }
 
@@ -52,5 +50,13 @@ public class Problema {
 
     public void setTipoProblema(TipoProblema tipoProblema) {
         this.tipoProblema = tipoProblema;
+    }
+
+    public boolean esComplejo() {
+        return tipoProblema.isComplejo();
+    }
+
+    public int tiempoMaximoResolucion() {
+        return tipoProblema.getTiempoMaximoEstimadoResolucion();
     }
 }

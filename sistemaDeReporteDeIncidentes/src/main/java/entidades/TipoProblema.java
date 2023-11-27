@@ -12,7 +12,9 @@ public class TipoProblema {
     private int id;
     @Basic
     private String nombre;
-    private int tiempoMaximoEstimadoDeResolucion;
+
+    private int tiempoMaximoEstimadoResolucion;
+    private boolean complejo;
 
     @OneToMany(mappedBy = "tipoProblema")
     private List<Problema> problemas;
@@ -20,14 +22,46 @@ public class TipoProblema {
     @ManyToMany(mappedBy = "tipoProblema")
     private List<Especialidad> especialidades;
 
-    public TipoProblema(String nombre, int tiempoMaximoEstimadoDeResolucion, List<Especialidad> especialidades) {
+    public TipoProblema(String nombre, boolean complejo, List<Problema> problemas) {
         this.nombre = nombre;
-        this.tiempoMaximoEstimadoDeResolucion = tiempoMaximoEstimadoDeResolucion;
-        this.especialidades = especialidades;
+        this.complejo = complejo;
+        this.problemas = problemas;
     }
 
     public TipoProblema() {
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getTiempoMaximoEstimadoResolucion() {
+        return tiempoMaximoEstimadoResolucion;
+    }
+
+    public void setTiempoMaximoEstimadoResolucion(int tiempoMaximoEstimadoResolucion) {
+        this.tiempoMaximoEstimadoResolucion = tiempoMaximoEstimadoResolucion;
+    }
+
+    public boolean isComplejo() {
+        return complejo;
+    }
+
+    public void setComplejo(boolean complejo) {
+        this.complejo = complejo;
+    }
+
+    public List<Problema> getProblemas() {
+        return problemas;
+    }
+
+    public void setProblemas(List<Problema> problemas) {
+        this.problemas = problemas;
     }
 
     public String getNombre() {
@@ -38,14 +72,6 @@ public class TipoProblema {
         this.nombre = nombre;
     }
 
-    public int getTiempoMaximoEstimadoDeResolucion() {
-        return tiempoMaximoEstimadoDeResolucion;
-    }
-
-    public void setTiempoMaximoEstimadoDeResolucion(int tiempoMaximoEstimadoDeResolucion) {
-        this.tiempoMaximoEstimadoDeResolucion = tiempoMaximoEstimadoDeResolucion;
-    }
-
     public List<Especialidad> getEspecialidades() {
         return especialidades;
     }
@@ -53,4 +79,5 @@ public class TipoProblema {
     public void setEspecialidades(List<Especialidad> especialidades) {
         this.especialidades = especialidades;
     }
+
 }

@@ -1,8 +1,5 @@
 package entidades;
 
-import entidades.Incidente;
-import entidades.Rol;
-import entidades.Sesion;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -21,11 +18,11 @@ public class Usuario {
     private List<Incidente> incidentes;
 
     @OneToOne
-    @JoinColumn(name = "usuario_id",  referencedColumnName="id")
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private Sesion sesion;
 
     @ManyToOne
-    @JoinColumn(name = "rol_id",referencedColumnName = "id")
+    @JoinColumn(name = "rol_id", referencedColumnName = "id")
     private Rol rol;
 
     public Usuario(String nombre, String contrasenia, Rol rol) {
@@ -73,20 +70,4 @@ public class Usuario {
     public boolean esRolAreaComercial() {
         return rol.esAreaComercial();
     }
-
-    //TODO
-    //public void editarTecnico(Tecnico tecnico) RRHH
-    //public void altaTecnico() RRHH
-    //public void bajaTecnico(Tecnico tecnico) RRHH
-    //public void crearReporteDiario(Incidente incidente, Tecnico tecnico, Estado estado)RRHH
-
-    //TODO
-    //public void editarCliente(Cliente cliente) areaComercial
-    //public void altaCliente() areaComercial
-    //public void bajaCliente(Cliente cliente) areaComercial
-
-    //TODO
-    //public void atenderLlamada() mesaAyuda
-    //public void crearIncidente(List<Servicio> Cliente, String descripcionProblema, TipoProblema problema) return List<Tecnico> y fechaEstimadaResolucion una vez seleccionado uno, mesaAyuda
-    //public void horasEstimadasDeResolucion(TipoProblema problema) segun complejidad- mesaAyuda
 }

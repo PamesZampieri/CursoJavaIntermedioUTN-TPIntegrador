@@ -1,13 +1,14 @@
 package controladores;
 
 import entidades.Especialidad;
+import entidades.Sesion;
 import entidades.Tecnico;
 import entidades.TipoNotificacion;
-import entidades.Sesion;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,7 +28,7 @@ public class ControladorTecnicos {
 
     public void altaTecnico() {
         if (!sesion.esUsuarioRRHH()) {
-            return;
+            System.out.println("Error, usted no dispone el permiso para realizar esta tarea.");
         }
 
         System.out.print("Ingrese el nombre del técnico: ");
@@ -48,13 +49,17 @@ public class ControladorTecnicos {
 
         System.out.println("Lista de Especialidades:");
 
-        for (Especialidad especialidade : especialidades) {
-            System.out.printf("Nombre: %s%n", especialidade.getNombre());
+        for (Especialidad especialidad : especialidades) {
+            System.out.printf("Nombre: %s%n", especialidad.getNombre());
             System.out.print("¿Desea agregar la especialidad, seleccione 1 para continuar o 2 si no?");
             int opcion = entrada.nextInt();
 
+            if (opcion != 1 && opcion != 2) {
+                throw new InputMismatchException("La opción ingresada es incorrecta, finalizando el proceso");
+            }
+
             if (opcion == 1) {
-                especialidadesTecnico.add(especialidade);
+                especialidadesTecnico.add(especialidad);
             }
         }
 
@@ -82,6 +87,10 @@ public class ControladorTecnicos {
         System.out.print("¿Desea confirmar la operación, coloque 1 para continuar o 2 para cancelar?");
         opcion = entrada.nextInt();
 
+        if (opcion != 1 && opcion != 2) {
+            throw new InputMismatchException("La opción ingresada es incorrecta, finalizando el proceso");
+        }
+
         if (opcion == 1) {
             EntityTransaction tx = em.getTransaction();
             tx.begin();
@@ -100,7 +109,7 @@ public class ControladorTecnicos {
 
     public void bajaTecnico() {
         if (!sesion.esUsuarioRRHH()) {
-            return;
+            System.out.println("Error, usted no dispone el permiso para realizar esta tarea.");
         }
 
         System.out.println("Listado de técnicos:");
@@ -108,7 +117,7 @@ public class ControladorTecnicos {
         List<Tecnico> tecnicos = em.createQuery("SELECT e FROM Tecnico e", Tecnico.class).getResultList();
 
         for (Tecnico tecnico : tecnicos) {
-            System.out.printf("ID : %s%nNombre: %s%nApellido: %s%n", tecnico.getId(), tecnico.getNombre(), tecnico.getApellido());
+            System.out.printf("ID : %s%nNombre: %s%nApellido: %s%n%n", tecnico.getId(), tecnico.getNombre(), tecnico.getApellido());
         }
 
         System.out.println("Escriba el id del técnico que desea dar de baja: ");
@@ -131,7 +140,7 @@ public class ControladorTecnicos {
 
     public void editarTecnico() {
         if (!sesion.esUsuarioRRHH()) {
-            return;
+            System.out.println("Error, usted no dispone el permiso para realizar esta tarea.");
         }
 
         System.out.println("Listado de técnicos:");
@@ -139,7 +148,8 @@ public class ControladorTecnicos {
         List<Tecnico> tecnicos = em.createQuery("SELECT e FROM Tecnico e", Tecnico.class).getResultList();
 
         for (Tecnico tecnico : tecnicos) {
-            System.out.printf("ID : %s%nNombre: %s%nApellido: %s%n", tecnico.getId(), tecnico.getNombre(), tecnico.getApellido());
+            System.out.printf("ID : %s%nNombre: %s%nApellido: %s%n%n", tecnico.getId(), tecnico.getNombre(),
+                    tecnico.getApellido());
         }
 
         System.out.println("Escriba el id del técnico que desea modificar: ");
@@ -155,6 +165,11 @@ public class ControladorTecnicos {
 
         System.out.printf("El nombre del técnico es %s. ¿Desea modificarlo? Seleccione opción 1 sino 2%n", tecnicoAModificar.getNombre());
         int opcion = entrada.nextInt();
+
+        if (opcion != 1 && opcion != 2) {
+            throw new InputMismatchException("La opción ingresada es incorrecta, finalizando el proceso");
+        }
+
         if (opcion == 1) {
             System.out.println("Escriba un nombre: ");
             entrada.nextLine();
@@ -164,6 +179,11 @@ public class ControladorTecnicos {
 
         System.out.printf("El apellido del técnico es %s. ¿Desea modificarlo? Seleccione opción 1 sino 2%n", tecnicoAModificar.getApellido());
         opcion = entrada.nextInt();
+
+        if (opcion != 1 && opcion != 2) {
+            throw new InputMismatchException("La opción ingresada es incorrecta, finalizando el proceso");
+        }
+
         if (opcion == 1) {
             System.out.println("Escriba un apellido: ");
             entrada.nextLine();
@@ -172,6 +192,11 @@ public class ControladorTecnicos {
 
         System.out.printf("El email del técnico es %s. ¿Desea modificarlo? Seleccione opción 1 sino 2%n", tecnicoAModificar.getEmail());
         opcion = entrada.nextInt();
+
+        if (opcion != 1 && opcion != 2) {
+            throw new InputMismatchException("La opción ingresada es incorrecta, finalizando el proceso");
+        }
+
         if (opcion == 1) {
             System.out.println("Escriba un email: ");
             entrada.nextLine();
@@ -180,6 +205,11 @@ public class ControladorTecnicos {
 
         System.out.printf("El teléfono del técnico es %s. ¿Desea modificarlo? Seleccione opción 1 sino 2%n", tecnicoAModificar.getTelefono());
         opcion = entrada.nextInt();
+
+        if (opcion != 1 && opcion != 2) {
+            throw new InputMismatchException("La opción ingresada es incorrecta, finalizando el proceso");
+        }
+
         if (opcion == 1) {
             System.out.println("Escriba un teléfono: ");
             entrada.nextLine();
@@ -189,6 +219,10 @@ public class ControladorTecnicos {
         System.out.printf("La lista de especialidades del técnico son: %s", tecnicoAModificar.getEspecialidades());
         System.out.println("¿Desea modificarlo? Seleccione opción 1 sino 2");
         opcion = entrada.nextInt();
+
+        if (opcion != 1 && opcion != 2) {
+            throw new InputMismatchException("La opción ingresada es incorrecta, finalizando el proceso");
+        }
 
         if (opcion == 1) {
             System.out.println("Lista de Especialidades:");
@@ -202,6 +236,10 @@ public class ControladorTecnicos {
                 System.out.print("¿Desea agregar la especialidad, seleccione 1 para continuar o 2 si no?");
                 opcion = entrada.nextInt();
 
+                if (opcion != 1 && opcion != 2) {
+                    throw new InputMismatchException("La opción ingresada es incorrecta, finalizando el proceso");
+                }
+
                 if (opcion == 1) {
                     especialidadesTecnico.add(especialidad);
                 }
@@ -212,6 +250,10 @@ public class ControladorTecnicos {
         System.out.printf("El tipo de notificación del técnico es: %s", tecnicoAModificar.getTipoNotificacion());
         System.out.println("¿Desea modificarla? Seleccione opción 1 sino 2");
         opcion = entrada.nextInt();
+
+        if (opcion != 1 && opcion != 2) {
+            throw new InputMismatchException("La opción ingresada es incorrecta, finalizando el proceso");
+        }
 
         if (opcion == 1) {
             List<TipoNotificacion> tiposNotificaciones = em.createQuery("SELECT t FROM TipoNotificacion t", TipoNotificacion.class).getResultList();
