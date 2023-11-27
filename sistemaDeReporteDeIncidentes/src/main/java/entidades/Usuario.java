@@ -70,4 +70,8 @@ public class Usuario {
     public boolean esRolAreaComercial() {
         return rol.esAreaComercial();
     }
+
+    public boolean esRolTecnico() {
+        return rol.esTecnico();
+    }
 }

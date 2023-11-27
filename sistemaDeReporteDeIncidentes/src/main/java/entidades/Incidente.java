@@ -138,10 +138,18 @@ public class Incidente {
     }
 
     public boolean estaEstadoCreado() {
+        if (estado == null) {
+            return false;
+        }
+
         return estado.esCreado();
     }
 
     public boolean estaEstadoResuelto() {
+        if (estado == null) {
+            return false;
+        }
+
         return estado.esResuelto();
     }
 
@@ -151,5 +159,14 @@ public class Incidente {
 
     public boolean estaResueltoDesde(LocalDateTime fechaHoraDesde) {
         return fechaResolucion.isAfter(fechaHoraDesde);
+    }
+
+    public long getTiempoResolucion() {
+        if (fechaCreacion == null || fechaResolucion == null) {
+            return 0;
+        }
+
+        // Calcula la diferencia en minutos entre la fecha de inicio y la fecha de resolución
+        return java.time.Duration.between(fechaCreacion, fechaResolucion).toMinutes();
     }
 }

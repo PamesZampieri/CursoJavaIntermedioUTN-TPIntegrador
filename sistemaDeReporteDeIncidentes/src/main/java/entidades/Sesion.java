@@ -63,4 +63,8 @@ public class Sesion {
     public boolean esUsuarioAreaComercial() {
         return usuario.esRolAreaComercial();
     }
+
+    public boolean esUsuarioTecnico() {
+        return usuario.esRolTecnico();
+    }
 }

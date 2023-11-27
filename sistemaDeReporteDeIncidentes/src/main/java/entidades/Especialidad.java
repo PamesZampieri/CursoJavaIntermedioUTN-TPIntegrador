@@ -6,7 +6,6 @@ import java.util.List;
 
 @Entity
 public class Especialidad {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

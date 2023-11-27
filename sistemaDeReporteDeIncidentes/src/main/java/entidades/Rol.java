@@ -55,4 +55,10 @@ public class Rol {
     public boolean esAreaComercial() {
         return nombre.equals("Area comercial");
     }
+
+    public boolean esTecnico() {
+        return nombre.equals("Técnico");
+    }
+
+
 }

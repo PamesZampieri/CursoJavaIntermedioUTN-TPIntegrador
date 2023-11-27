@@ -108,6 +108,10 @@ public class Tecnico {
     }
 
     public boolean estaDisponible() {
+        if (incidentes == null) {
+            return true;
+        }
+
         for (Incidente incidente : incidentes) {
             if (incidente.estaEstadoCreado()) {
                 return false;
@@ -179,5 +183,19 @@ public class Tecnico {
         }
 
         return resultado;
+    }
+
+    public double getTiempoPromedioResolucion() {
+        if (incidentes == null || incidentes.isEmpty()) {
+            return 0;
+        }
+
+        double tiempoTotal = 0;
+
+        for (Incidente incidente : incidentes) {
+            tiempoTotal += incidente.getTiempoResolucion();
+        }
+
+        return tiempoTotal / incidentes.size();
     }
 }
